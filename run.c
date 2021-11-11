@@ -1,7 +1,11 @@
 #include "defs.h"
 
 /* run command with no input mod */
-void run(char **args) {
+int run(char **args) {
+    pid_t cpid = fork();
+    if (cpid == -1) {
+        return -1;
+    }
 }
 
 /* args > file */

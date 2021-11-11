@@ -10,15 +10,15 @@ char **split_for_exec(char *substring);
 int get_redir_mode(char *line);
 
 /* run command with no input mod */
-void run(char **args);
+int run(char **args);
 
 /* args > file */
-void run_out(char **args, char *file);
+int run_out(char **args, char *file);
 
 /* args >> file */
-void run_app(char **args, char *file);
+int run_app(char **args, char *file);
 
 /* args < file */
-void run_inp(char **args, char *file);
+int run_inp(char **args, char *file);
 
 #endif
