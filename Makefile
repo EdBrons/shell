@@ -1,14 +1,11 @@
 CFLAGS=-Wall -pedantic -g
 
-.PHONY: all
-all: mysh
+mysh: mysh.o run.o parse.o
+	gcc -o mysh mysh.o run.o parse.o
 
-mysh: mysh.o
-	gcc $(CFLAGS) -o mysh mysh.o
-
-mysh.o: mysh.c
-	gcc $(CFLAGS) -c -o mysh.o mysh.c
+%.o: %.c
+	gcc $(CFLAGS) -c -o $@ $^
 
 .PHONY: clean
 clean:
-	rm -f mysh mysh.o
+	rm -f mysh mysh.o run.o parse.o
