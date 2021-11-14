@@ -1,3 +1,7 @@
 mysh
 *.o
+<<<<<<< HEAD
 out*
+=======
+outfile
+>>>>>>> 8d05462 (basics of piping)
