@@ -25,6 +25,9 @@ int main(int argc, char *argv[]) {
     char in[LINELEN];
     int redir_mode = REDIR_NONE;
 
+    test();
+    return;
+
     while (1) {
         print_prompt();
 

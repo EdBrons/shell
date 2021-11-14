@@ -9,16 +9,18 @@ char **split_for_exec(char *substring);
 
 int get_redir_mode(char *line);
 
+void test();
+
 /* run command with no input mod */
-int run(char **args);
+int run(char *args[]);
 
 /* args > file */
-int run_out(char **args, char *file);
+int run_out(char *args[], char *file);
 
 /* args >> file */
-int run_app(char **args, char *file);
+int run_app(char *args[], char *file);
 
 /* args < file */
-int run_inp(char **args, char *file);
+int run_inp(char *args[], char *file);
 
 #endif
