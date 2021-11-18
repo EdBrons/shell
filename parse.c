@@ -1,3 +1,4 @@
+#include <stddef.h>
 #include "defs.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -51,8 +52,6 @@ char **split_by_mods(char *line) {
 
 
     return vars;
-
-
 }
 
 /* splits the substring into an array of strings for exec */
@@ -65,7 +64,6 @@ char **split_for_exec(char *substring) {
         vars[i] = malloc(strlen(token));
         memcpy(vars[i], token, strlen(token));
         token = strtok(NULL, *space_);
-
     }
     }
     /* add a null byte at the end */

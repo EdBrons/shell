@@ -9,12 +9,6 @@
 
 #define LINELEN 4096
 
-#define REDIR_NONE 0
-#define REDIR_OUT  1
-#define REDIR_APP  2
-#define REDIR_INP  3
-#define REDIR_PIPE 4
-
 char *prompt = "mysh$";
 
 void print_prompt() {
@@ -24,6 +18,9 @@ void print_prompt() {
 int main(int argc, char *argv[]) {
     char in[LINELEN];
     int redir_mode = REDIR_NONE;
+
+    test();
+    return;
 
     while (1) {
         print_prompt();
