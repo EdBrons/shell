@@ -15,13 +15,13 @@ int run_progs(struct prog_info *progs, int progc) {
     for (int i = 0; i < progc; i++) {
         switch (progs[i].mode) {
             case REDIR_OUT:
-                if ((io_filedes[i] = open(progs->file, O_WRONLY | O_CREAT)) < 0) {
+                if ((io_filedes[i] = open(progs->file, O_WRONLY | O_CREAT | O_TRUNC)) < 0) {
                     perror("open");
                     return -1;
                 }
                 break;
             case REDIR_APP:
-                if ((io_filedes[i] = open(progs->file, O_WRONLY | O_CREAT | O_TRUNC)) < 0) {
+                if ((io_filedes[i] = open(progs->file, O_WRONLY | O_CREAT)) < 0) {
                     perror("open");
                     return -1;
                 }
@@ -85,9 +85,9 @@ int run_progs(struct prog_info *progs, int progc) {
 }
 
 void test() {
-    char *args[] = { "ls", "-l", "-a", "s", NULL };
-    printf("%d\n", sizeof(args) / sizeof(args[0]));
-    struct prog_info p1 = { { "ls", "-l", NULL }, 2, REDIR_APP, 0, "out" };
-    struct prog_info ps[] = { p1 };
-    run_progs(ps, 1);
+    struct prog_info p1 = { { "ls", "-l", NULL }, 2, REDIR_NONE, 1, "" };
+    struct prog_info p2 = { { "grep", "x", NULL }, 2, REDIR_OUT, 0, "out" };
+    struct prog_info ps[] = { p1, p2 };
+    int l = sizeof(ps) / sizeof(ps[0]);
+    run_progs(ps, l);
 }

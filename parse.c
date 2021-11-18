@@ -64,6 +64,7 @@ char **split_for_exec(char *substring) {
         vars[i] = malloc(strlen(token));
         memcpy(vars[i], token, strlen(token));
         token = strtok(NULL, *space_);
+
     }
     }
     /* add a null byte at the end */
