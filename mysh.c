@@ -22,6 +22,7 @@ int main(int argc, char *argv[]) {
     test();
     return;
 
+    /*
     while (1) {
         print_prompt();
 
@@ -53,4 +54,5 @@ int main(int argc, char *argv[]) {
             run_inp(args, file);
         }
     } 
+    */
 }
