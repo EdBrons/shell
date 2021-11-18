@@ -26,26 +26,10 @@ char **split_for_exec(char *substring);
 
 int get_redir_mode(char *line);
 
-<<<<<<< HEAD
 struct prog_info *get_progs(char *line);
 
 int run_progs(struct prog_info *progs, int progc);
 
 void test();
-=======
-void test();
-
-/* run command with no input mod */
-int run(char *args[]);
-
-/* args > file */
-int run_out(char *args[], char *file);
-
-/* args >> file */
-int run_app(char *args[], char *file);
-
-/* args < file */
-int run_inp(char *args[], char *file);
->>>>>>> 8d05462 (basics of piping)
 
 #endif
