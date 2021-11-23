@@ -17,19 +17,20 @@ struct prog_info {
     int pipe;
     char *file;
 };
-
+void split_by_pipe(char *line);
 /* split line into the different program executions */
-char **split_by_mods(char *line);
-
+void split_by_mods(char *line);
 /* splits the substring into an array of strings for exec */
 char **split_for_exec(char *substring);
 
-int get_redir_mode(char *line);
+char *get_redir_mode(char *line);
 
 struct prog_info *get_progs(char *line);
 
 int run_progs(struct prog_info *progs, int progc);
 
 void test();
+
+void testParse();
 
 #endif

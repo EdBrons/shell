@@ -1,7 +1,7 @@
 CFLAGS=-Wall -pedantic -g
 
-mysh: mysh.o run.o 
-	gcc -o mysh mysh.o run.o 
+mysh: mysh.o run.o parse.o
+	gcc -o mysh mysh.o run.o parse.o
 
 %.o: %.c
 	gcc $(CFLAGS) -c -o $@ $^

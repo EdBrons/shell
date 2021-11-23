@@ -19,8 +19,7 @@ int main(int argc, char *argv[]) {
     char in[LINELEN];
     int redir_mode = REDIR_NONE;
 
-    test();
-    return;
+    testParse();
 
     /*
     while (1) {
