@@ -10,7 +10,7 @@
 int exec_prog(struct prog_info *p) {
     static int last_pipe[2] = { -1, -1 };
     int current_pipe[2];
-    int io_filedes;
+    int io_filedes = -1;
     int child_status;
 
     if (p == NULL) {
@@ -79,7 +79,9 @@ int exec_prog(struct prog_info *p) {
     }
 
     wait(&child_status);
+    if (io_filedes > 0) {
+        close(io_filedes);
+    }
     memcpy(last_pipe, current_pipe, sizeof(int) * 2);
-
     return 1;
 }
