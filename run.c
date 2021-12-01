@@ -21,13 +21,13 @@ int exec_prog(struct prog_info *p) {
 
     switch (p->mode) {
         case REDIR_OUT:
-            if ((io_filedes = open(p->file, O_WRONLY | O_CREAT | O_TRUNC)) < 0) {
+            if ((io_filedes = open(p->file, O_WRONLY | O_CREAT | O_TRUNC, 0666)) < 0) {
                 perror("open");
                 return -1;
             }
             break;
         case REDIR_APP:
-            if ((io_filedes = open(p->file, O_WRONLY | O_CREAT)) < 0) {
+            if ((io_filedes = open(p->file, O_WRONLY | O_CREAT, 0666)) < 0) {
                 perror("open");
                 return -1;
             }
@@ -56,7 +56,6 @@ int exec_prog(struct prog_info *p) {
             perror("fork");
             return -1;
         case 0:
-            /*
             if (p->mode == REDIR_INP) {
                 while ((dup2(io_filedes, STDIN_FILENO) == -1) && (errno == EINTR))
                     ;
@@ -72,7 +71,6 @@ int exec_prog(struct prog_info *p) {
                 while ((dup2(last_pipe[1], STDOUT_FILENO) == -1) && (errno == EINTR))
                     ;
             }
-            */
             execvp(p->args[0], p->args);
             perror("exec");
             return -1;

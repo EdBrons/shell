@@ -35,7 +35,6 @@ int get_next_prog(struct prog_info *p, char *line) {
             p->mode = REDIR_INP;
             file_next = 1;
         } else {
-            // strncpy(p->args[p->argc++], word, LINELEN);
             p->args[p->argc++] = word;
         }
     } while((word = strtok(NULL, " ")) != NULL);
