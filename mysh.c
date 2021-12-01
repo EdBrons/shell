@@ -20,7 +20,10 @@ int main(int argc, char *argv[]) {
     while (1) {
         print_prompt();
 
-        fgets(in, LINELEN, stdin);
+        if (fgets(in, LINELEN, stdin) == NULL) {
+            break;
+        }
+
         if (strncmp(in, "exit\n", 5) == 0) {
             break;
         }
