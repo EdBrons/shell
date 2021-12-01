@@ -5,32 +5,19 @@
 #define REDIR_OUT  1
 #define REDIR_APP  2
 #define REDIR_INP  3
-#define REDIR_PIPE 4
-#define REDIR_TOTAL 5
 
+#define LINELEN 4096
 #define MAX_ARGC 10
 
 struct prog_info {
-    char *args[MAX_ARGC];
+    char *args[MAX_ARGC+1];
     int argc;
     int mode;
     int pipe;
-    char *file;
+    char file[LINELEN];
 };
-void split_by_pipe(char *line);
-/* split line into the different program executions */
-void split_by_mods(char *line);
-/* splits the substring into an array of strings for exec */
-char **split_for_exec(char *substring);
 
-char *get_redir_mode(char *line);
-
-struct prog_info *get_progs(char *line);
-
-int run_progs(struct prog_info *progs, int progc);
-
-void test();
-
-void testParse();
+int get_next_prog(struct prog_info *p, char *line);
+int exec_prog(struct prog_info *p);
 
 #endif

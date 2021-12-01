@@ -7,8 +7,6 @@
 
 #include "defs.h"
 
-#define LINELEN 4096
-
 char *prompt = "mysh$";
 
 void print_prompt() {
@@ -17,11 +15,8 @@ void print_prompt() {
 
 int main(int argc, char *argv[]) {
     char in[LINELEN];
-    int redir_mode = REDIR_NONE;
+    struct prog_info p;
 
-    testParse();
-
-    /*
     while (1) {
         print_prompt();
 
@@ -30,28 +25,11 @@ int main(int argc, char *argv[]) {
             break;
         }
 
-        redir_mode = get_redir_mode(in);
-        char **substrings = split_by_mods(in);
-
-        if (redir_mode == REDIR_NONE) {
-            char **args = split_for_exec(substrings[0]);
-            run(args);
-        }
-        else if (redir_mode == REDIR_OUT) {
-            char **args = split_for_exec(substrings[0]);
-            char *file = split_for_exec(substrings[0]);
-            run_out(args, file);
-        }
-        else if (redir_mode == REDIR_APP) {
-            char **args = split_for_exec(substrings[0]);
-            char *file = split_for_exec(substrings[0]);
-            run_app(args, file);
-        }
-        else if (redir_mode == REDIR_INP) {
-            char **args = split_for_exec(substrings[0]);
-            char *file = split_for_exec(substrings[0]);
-            run_inp(args, file);
-        }
+        get_next_prog(&p, in);
+        do {
+            exec_prog(&p);
+        } while (get_next_prog(&p, NULL) > 0);
+        exec_prog(NULL);
+        fflush(stdout);
     } 
-    */
 }
