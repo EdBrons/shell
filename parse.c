@@ -6,12 +6,18 @@
 
 int get_next_prog(struct prog_info *p, char *line) {
     static char *save_ptr;
+    p->read_pipe = 1;
+    p->write_pipe = 1;
     if (line != NULL) {
         save_ptr = NULL;
+        p->read_pipe = 0;
     }
-    char *sub_str = strtok_r(line, "|\n\0", &save_ptr);
+    char *sub_str = strtok_r(line, "|", &save_ptr);
     if (sub_str == NULL) {
         return -1;
+    } else if (sub_str[strlen(sub_str) - 1] == '\n') {
+        sub_str[strlen(sub_str) - 1] = '\0';
+        p->write_pipe = 0;
     }
 
     p->mode = REDIR_NONE;

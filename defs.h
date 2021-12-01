@@ -13,7 +13,8 @@ struct prog_info {
     char *args[MAX_ARGC+1];
     int argc;
     int mode;
-    int pipe;
+    int read_pipe;
+    int write_pipe;
     char file[LINELEN];
 };
 

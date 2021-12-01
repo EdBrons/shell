@@ -24,6 +24,9 @@ int main(int argc, char *argv[]) {
         if (strncmp(in, "exit\n", 5) == 0) {
             break;
         }
+        else if (strncmp(in, "\n", 1) == 0) {
+            continue;
+        }
 
         get_next_prog(&p, in);
         do {
