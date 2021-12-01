@@ -59,7 +59,7 @@ int exec_prog(struct prog_info *p) {
             if (p->mode == REDIR_INP) {
                 while ((dup2(io_filedes, STDIN_FILENO) == -1) && (errno == EINTR))
                     ;
-            } else if (last_pipe[0] != -1){
+            } else {
                 while ((dup2(last_pipe[0], STDIN_FILENO) == -1) && (errno == EINTR))
                     ;
             }
@@ -68,7 +68,7 @@ int exec_prog(struct prog_info *p) {
                 while ((dup2(io_filedes, STDOUT_FILENO) == -1) && (errno == EINTR))
                     ;
             } else {
-                while ((dup2(last_pipe[1], STDOUT_FILENO) == -1) && (errno == EINTR))
+                while ((dup2(current_pipe[1], STDOUT_FILENO) == -1) && (errno == EINTR))
                     ;
             }
             execvp(p->args[0], p->args);
@@ -79,9 +79,17 @@ int exec_prog(struct prog_info *p) {
     }
 
     wait(&child_status);
+
     if (io_filedes > 0) {
         close(io_filedes);
     }
+    if (last_pipe[0] == -1) {
+        close(last_pipe[0]);
+    }
+    if (last_pipe[1] == -1) {
+        close(last_pipe[1]);
+    }
+
     memcpy(last_pipe, current_pipe, sizeof(int) * 2);
     return 1;
 }
