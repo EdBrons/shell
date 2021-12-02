@@ -12,14 +12,7 @@ int exec_prog(struct prog_info *p) {
     int current_pipe[2];
     int io_filedes = -1;
 
-    if (p == NULL) {
-        // close(last_pipe[0]);
-        // close(last_pipe[1]);
-        // last_pipe[0] = -1;
-        // last_pipe[1] = -1;
-        return 1;
-    }
-
+    /* open file for io redirection */
     switch (p->mode) {
         case REDIR_OUT:
             if ((io_filedes = open(p->file, O_WRONLY | O_CREAT | O_TRUNC, 0666)) < 0) {
@@ -41,16 +34,18 @@ int exec_prog(struct prog_info *p) {
             break;
     }
 
+    /* create pipes */
     if (pipe(current_pipe) == -1) {
         perror("fork");
         return -1;
     }
 
     switch (fork()) {
-        case -1:
+        case -1: /* error */
             perror("fork");
             return -1;
-        case 0:
+        case 0: /* child */
+            /* change stdin of child */
             close(last_pipe[1]);
             if (p->mode == REDIR_INP) {
                 while ((dup2(io_filedes, STDIN_FILENO) == -1) && (errno == EINTR))
@@ -63,6 +58,7 @@ int exec_prog(struct prog_info *p) {
                 close(last_pipe[0]);
             }
 
+            /* change stdout of child */
             close(current_pipe[0]);
             if ((p->mode == REDIR_APP) | (p->mode == REDIR_OUT)) {
                 while ((dup2(io_filedes, STDOUT_FILENO) == -1) && (errno == EINTR))
@@ -75,10 +71,13 @@ int exec_prog(struct prog_info *p) {
                 close(current_pipe[1]);
             }
 
+            /* execute comand */
             execvp(p->args[0], p->args);
-            perror("exec");
+            /* command not found */
+            printf("mysh: command not found: %s\n", p->args[0]);
+
             return -1;
-        default:
+        default: /* parent */
             close(io_filedes);
             close(last_pipe[0]);
             close(last_pipe[1]);

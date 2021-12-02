@@ -21,10 +21,10 @@ int main(int argc, char *argv[]) {
     while (1) {
         print_prompt();
 
+        /* get input */
         if (fgets(in, LINELEN, stdin) == NULL) {
             break;
         }
-
         if (strncmp(in, "exit\n", 5) == 0) {
             break;
         }
@@ -37,10 +37,10 @@ int main(int argc, char *argv[]) {
             exec_prog(&p);
             c++;
         } while (get_next_prog(&p, NULL) > 0);
+        /* wait for children */
         for (; c > 0; c--) {
             wait(NULL);
         }
-        // exec_prog(NULL);
         fflush(stdout);
     } 
 }
