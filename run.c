@@ -21,7 +21,7 @@ int exec_prog(struct prog_info *p) {
             }
             break;
         case REDIR_APP:
-            if ((io_filedes = open(p->file, O_WRONLY | O_CREAT, 0666)) < 0) {
+            if ((io_filedes = open(p->file, O_WRONLY | O_APPEND | O_CREAT, 0666)) < 0) {
                 perror("open");
                 return -1;
             }
