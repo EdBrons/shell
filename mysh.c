@@ -15,6 +15,7 @@ void print_prompt() {
 
 int main(int argc, char *argv[]) {
     char in[LINELEN];
+    int c = 0;
     struct prog_info p;
 
     while (1) {
@@ -34,8 +35,12 @@ int main(int argc, char *argv[]) {
         get_next_prog(&p, in);
         do {
             exec_prog(&p);
+            c++;
         } while (get_next_prog(&p, NULL) > 0);
-        exec_prog(NULL);
+        for (; c > 0; c--) {
+            wait(NULL);
+        }
+        // exec_prog(NULL);
         fflush(stdout);
     } 
 }
