@@ -37,6 +37,7 @@ int main(int argc, char *argv[]) {
         if(strncmp(p.args[0], "exit", 4) == 0 ){
             break;
         }
+
         do {
             exec_prog(&p);
             args_count++;
@@ -106,14 +107,13 @@ int get_next_prog(struct prog_info *p, char *line) {
 int exec_prog(struct prog_info *p) {
     static int last_pipe[2] = { -1, -1 };
     int current_pipe[2];
-    //int io_filedes = -1;
     int out_file_des = -1;
     int in_file_des = -1; 
 
     /* open file for io redirection */
 
     if(p->in_mode == REDIR_INP){
-      
+
                 if ((in_file_des  = open(p->in_file, O_RDONLY)) < 0) {
                 perror("open");
                 return -1;
@@ -122,14 +122,14 @@ int exec_prog(struct prog_info *p) {
     }
     switch (p->out_mode) {
         case REDIR_OUT:
-      
+
             if ((out_file_des= open(p->out_file, O_WRONLY | O_CREAT | O_TRUNC, 0666)) < 0) {
                 perror("open");
                 return -1;
             }
             break;
         case REDIR_APP:
-      
+
             if ((out_file_des = open(p->out_file, O_WRONLY | O_APPEND | O_CREAT, 0666)) < 0) {
                 perror("open");
                 return -1;
