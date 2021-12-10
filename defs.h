@@ -6,7 +6,6 @@
 #define REDIR_APP  2
 #define REDIR_INP  3
 
-
 #define LINELEN 4096
 #define MAX_ARGC 10
 
