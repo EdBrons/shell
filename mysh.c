@@ -28,7 +28,6 @@ int main(int argc, char *argv[]) {
         if (fgets(usr_input, LINELEN, stdin) == NULL) {
             break;
         }
-        
         else if (strncmp(usr_input, "\n", 1) == 0) {
             continue;
         }
