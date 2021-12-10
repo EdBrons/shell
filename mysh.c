@@ -108,7 +108,6 @@ int get_next_prog(struct prog_info *p, char *line) {
 int exec_prog(struct prog_info *p) {
     static int last_pipe[2] = { -1, -1 };
     int current_pipe[2];
-    //int io_filedes = -1;
     int out_file_des = -1;
     int in_file_des = -1; 
 
