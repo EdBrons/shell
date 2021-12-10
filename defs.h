@@ -10,9 +10,6 @@
 #define LINELEN 4096
 #define MAX_ARGC 10
 
-
-
-
 struct prog_info {
     char *args[MAX_ARGC+1];
     int argc;
