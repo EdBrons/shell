@@ -67,26 +67,34 @@ int get_next_prog(struct prog_info *p, char *line) {
         p->write_pipe = 0;
     }
 
-    p->mode = REDIR_NONE;
+    p->in_mode = REDIR_NONE;
+    p->out_mode = REDIR_NONE;
     p->argc = 0;
-    int file_next = 0;
+    int file_next_in = 0;
+    int file_next_out = 0;
     char *word = strtok(sub_str, " ");
 
     do {
         if (p->argc >= MAX_ARGC) {
             break;
-        } else if (file_next) {
-            strncpy(p->file, word, LINELEN);
-            file_next = 0;
+        } else if (file_next_in) {
+            strncpy(p->in_file, word, LINELEN);
+            file_next_in = 0;
+
+        } else if (file_next_out) {
+            strncpy(p->out_file, word, LINELEN);
+            file_next_out = 0;
+
         } else if (strncmp(word, ">", LINELEN) == 0) {
-            p->mode = REDIR_OUT;
-            file_next = 1;
+            p->out_mode = REDIR_OUT;
+            file_next_out = 1;
+
         } else if (strncmp(word, ">>", LINELEN) == 0) {
-            p->mode = REDIR_APP;
-            file_next = 1;
+            p->out_mode = REDIR_APP;
+            file_next_out = 1;
         } else if (strncmp(word, "<", LINELEN) == 0) {
-            p->mode = REDIR_INP;
-            file_next = 1;
+            p->in_mode = REDIR_INP;
+            file_next_in = 1;
         } else {
             p->args[p->argc++] = word;
         }
@@ -100,29 +108,37 @@ int get_next_prog(struct prog_info *p, char *line) {
 int exec_prog(struct prog_info *p) {
     static int last_pipe[2] = { -1, -1 };
     int current_pipe[2];
-    int io_filedes = -1;
+    //int io_filedes = -1;
+    int out_file_des = -1;
+    int in_file_des = -1; 
 
     /* open file for io redirection */
-    switch (p->mode) {
+
+    if(p->in_mode == REDIR_INP){
+
+                if ((in_file_des  = open(p->in_file, O_RDONLY)) < 0) {
+                perror("open");
+                return -1;
+            }
+
+    }
+    switch (p->out_mode) {
         case REDIR_OUT:
-            if ((io_filedes = open(p->file, O_WRONLY | O_CREAT | O_TRUNC, 0666)) < 0) {
+
+            if ((out_file_des= open(p->out_file, O_WRONLY | O_CREAT | O_TRUNC, 0666)) < 0) {
                 perror("open");
                 return -1;
             }
             break;
         case REDIR_APP:
-            if ((io_filedes = open(p->file, O_WRONLY | O_APPEND | O_CREAT, 0666)) < 0) {
-                perror("open");
-                return -1;
-            }
-            break;
-        case REDIR_INP:
-            if ((io_filedes = open(p->file, O_RDONLY)) < 0) {
+
+            if ((out_file_des = open(p->out_file, O_WRONLY | O_APPEND | O_CREAT, 0666)) < 0) {
                 perror("open");
                 return -1;
             }
             break;
     }
+
 
     /* create pipes */
     if (pipe(current_pipe) == -1) {
@@ -137,8 +153,8 @@ int exec_prog(struct prog_info *p) {
         case 0: /* child */
             /* change stdin of child */
             close(last_pipe[1]);
-            if (p->mode == REDIR_INP) {
-                while ((dup2(io_filedes, STDIN_FILENO) == -1) && (errno == EINTR))
+            if (p->in_mode == REDIR_INP) {
+                while ((dup2(in_file_des , STDIN_FILENO) == -1) && (errno == EINTR))
                     ;
             } else if (p->read_pipe) {
                 while ((dup2(last_pipe[0], STDIN_FILENO) == -1) && (errno == EINTR))
@@ -150,8 +166,8 @@ int exec_prog(struct prog_info *p) {
 
             /* change stdout of child */
             close(current_pipe[0]);
-            if ((p->mode == REDIR_APP) | (p->mode == REDIR_OUT)) {
-                while ((dup2(io_filedes, STDOUT_FILENO) == -1) && (errno == EINTR))
+            if ((p->out_mode == REDIR_APP) | (p->out_mode == REDIR_OUT)) {
+                while ((dup2(out_file_des , STDOUT_FILENO) == -1) && (errno == EINTR))
                     ;
             } else if (p->write_pipe) {
                 while ((dup2(current_pipe[1], STDOUT_FILENO) == -1) && (errno == EINTR))
@@ -170,7 +186,8 @@ int exec_prog(struct prog_info *p) {
             //printf("mysh: command not found: %s\n", p->args[0]);
             return -1;
         default: /* parent */
-            close(io_filedes);
+            close(out_file_des );
+            close(in_file_des );
             close(last_pipe[0]);
             close(last_pipe[1]);
             memcpy(last_pipe, current_pipe, sizeof(int) * 2);

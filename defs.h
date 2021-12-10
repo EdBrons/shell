@@ -6,10 +6,12 @@
 #define REDIR_APP  2
 #define REDIR_INP  3
 
+
 #define LINELEN 4096
 #define MAX_ARGC 10
 
-#define 
+
+
 
 struct prog_info {
     char *args[MAX_ARGC+1];
@@ -22,7 +24,8 @@ struct prog_info {
     int in_mode;
     int out_mode;
     /* the file the process possible writes to or reads from */
-    char file[LINELEN];
+    char in_file[LINELEN];
+    char out_file[LINELEN];
 };
 
 /* parses a single program execution from line */
