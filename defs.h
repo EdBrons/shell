@@ -9,6 +9,8 @@
 #define LINELEN 4096
 #define MAX_ARGC 10
 
+#define 
+
 struct prog_info {
     char *args[MAX_ARGC+1];
     int argc;
@@ -17,7 +19,8 @@ struct prog_info {
     /* indicates whether the program writes to a pipe */
     int write_pipe;
     /* indicates whether the process has a >, >>, <, or no io redirection */
-    int mode;
+    int in_mode;
+    int out_mode;
     /* the file the process possible writes to or reads from */
     char file[LINELEN];
 };
