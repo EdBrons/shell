@@ -28,19 +28,17 @@ int main(int argc, char *argv[]) {
         if (fgets(usr_input, LINELEN, stdin) == NULL) {
             break;
         }
-        /*
-        if (strncmp(in, "exit\n", 5) == 0) {
-            break;
-        }
-        */
-        if (strncmp(in, "\n", 1) == 0) {
+        
+        else if (strncmp(usr_input, "\n", 1) == 0) {
             continue;
         }
 
-        get_next_prog(&p, in);
-        if (strncmp(p.args[0], "exit", 4) == 0) {
+        get_next_prog(&p, usr_input);
+        if(strncmp(p.args[0], "exit", 4) == 0 ){
             break;
         }
+
+
         do {
             exec_prog(&p);
             args_count++;
