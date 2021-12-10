@@ -25,14 +25,19 @@ int main(int argc, char *argv[]) {
         if (fgets(in, LINELEN, stdin) == NULL) {
             break;
         }
+        /*
         if (strncmp(in, "exit\n", 5) == 0) {
             break;
         }
-        else if (strncmp(in, "\n", 1) == 0) {
+        */
+        if (strncmp(in, "\n", 1) == 0) {
             continue;
         }
 
         get_next_prog(&p, in);
+        if (strncmp(p.args[0], "exit", 4) == 0) {
+            break;
+        }
         do {
             exec_prog(&p);
             c++;
