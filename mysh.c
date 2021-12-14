@@ -28,11 +28,11 @@ int main(int argc, char *argv[]) {
         if (fgets(usr_input, LINELEN, stdin) == NULL) {
             break;
         }
-        else if (strncmp(usr_input, "\n", 1) == 0) {
+
+        if (get_next_prog(&p, usr_input) == -1) {
             continue;
         }
 
-        get_next_prog(&p, usr_input);
         if(strncmp(p.args[0], "exit", 4) == 0 ){
             break;
         }
@@ -71,7 +71,12 @@ int get_next_prog(struct prog_info *p, char *line) {
     p->argc = 0;
     int file_next_in = 0;
     int file_next_out = 0;
+
     char *word = strtok(sub_str, " ");
+
+    if (word == NULL) {
+        return -1;
+    }
 
     do {
         if (p->argc >= MAX_ARGC) {
