@@ -48,6 +48,7 @@ int main(int argc, char *argv[]) {
         }
         fflush(stdout);
     } 
+    //printf("\nexit\n");
 }
 
 int get_next_prog(struct prog_info *p, char *line) {
@@ -182,7 +183,7 @@ int exec_prog(struct prog_info *p) {
             // 
             /* command not found */
             //printf("mysh: command not found: %s\n", p->args[0]);
-            return -1;
+            _exit(-1);
         default: /* parent */
             close(out_file_des );
             close(in_file_des );
